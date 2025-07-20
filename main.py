@@ -28,7 +28,7 @@ async def handle_message(msg):
 
 
     data = await fetch_data(api_token, ts)
-    filename = "sales.json"
+    filename = "fbs.json"
     prefix = f"{ts}/{task_id}/"
     minio_key = prefix + filename
 
