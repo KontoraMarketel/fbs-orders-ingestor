@@ -4,8 +4,6 @@ from datetime import datetime
 
 import aiohttp
 
-from utils import get_yesterday_moscow_from_utc
-
 GET_FBS_ORDERS = "https://marketplace-api.wildberries.ru/api/v3/orders"
 
 
@@ -16,10 +14,8 @@ async def fetch_data(api_token: str, ts: str) -> list:
     next_val = 0
     all_orders = []
 
-    yesterday = get_yesterday_moscow_from_utc(ts)
-
-    date_from = datetime.strptime(yesterday, "%Y-%m-%d")
-    date_to = datetime.strptime(yesterday, "%Y-%m-%d")
+    date_from = datetime.strptime(ts, "%Y-%m-%d")
+    date_to = datetime.strptime(ts, "%Y-%m-%d")
 
     async with aiohttp.ClientSession(headers=headers) as session:
         while True:
@@ -47,7 +43,7 @@ async def fetch_page_with_retry(session, url, params):
     while True:
         async with session.get(url, params=params) as response:
             if response.status == 429:
-                retry_after = int(response.headers.get("X-Ratelimit-Retry", 10))
+                retry_after = int(response.headers.get("X-Ratellimit-Retry", 10))
                 logging.warning(
                     f"Rate limited (429). Retrying after {retry_after} seconds..."
                 )
