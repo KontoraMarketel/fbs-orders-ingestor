@@ -1,6 +1,6 @@
 import asyncio
 import logging
-from utils import get_yesterday_bounds_msk
+from utils import get_yesterday_bounds_utc
 
 import aiohttp
 
@@ -14,15 +14,15 @@ async def fetch_data(api_token: str, ts: str) -> list:
     next_val = 0
     all_orders = []
 
-    date_from, date_to = get_yesterday_bounds_msk(ts)
+    date_from, date_to = get_yesterday_bounds_utc(ts)
 
     async with aiohttp.ClientSession(headers=headers) as session:
         while True:
             params = {
                 "limit": limit,
                 "next": next_val,
-                "dateFrom": int(date_from),
-                "dateTo": int(date_to),
+                "dateFrom": int(date_from.timestamp()),
+                "dateTo": int(date_to.timestamp()),
             }
 
             data = await fetch_page_with_retry(session, GET_FBS_ORDERS, params)
