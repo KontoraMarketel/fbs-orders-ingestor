@@ -1,7 +1,6 @@
 import asyncio
 import logging
-from datetime import datetime
-from utils import chunked, get_yesterday_bounds_msk
+from utils import get_yesterday_bounds_msk
 
 import aiohttp
 
@@ -22,8 +21,8 @@ async def fetch_data(api_token: str, ts: str) -> list:
             params = {
                 "limit": limit,
                 "next": next_val,
-                "dateFrom": int(date_from.timestamp()),
-                "dateTo": int(date_to.timestamp()),
+                "dateFrom": int(date_from),
+                "dateTo": int(date_to),
             }
 
             data = await fetch_page_with_retry(session, GET_FBS_ORDERS, params)
